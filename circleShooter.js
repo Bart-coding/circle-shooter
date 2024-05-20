@@ -69,23 +69,18 @@ function drawShottedCircles() {
     shottedCircles[i].x = lerp(shottedCircles[i].x, shottedCircles[i].targetX, 0.03);
     shottedCircles[i].y = lerp(shottedCircles[i].y, shottedCircles[i].targetY, 0.03);
     
+    fill(shottedCircles[i].circleColor);
+    noStroke();
+    circle(shottedCircles[i].x, shottedCircles[i].y, shottedCircleRadius * 2);
+    
     if (dist(shottedCircles[i].x, shottedCircles[i].y, bigCircleX, bigCircleY) <= bigCircleRadius + shottedCircleRadius) {
       bigCircleColor = shottedCircles[i].circleColor;
-      fill(shottedCircles[i].circleColor);
-      noStroke();
-      circle(shottedCircles[i].x, shottedCircles[i].y, shottedCircleRadius * 2);
       shottedCircles.splice(i, 1);
-      
       hitsCounter++;
-      if (hitsCounter % buttonHelperFactor === 0) {
+	  if (hitsCounter % buttonHelperFactor === 0) {
         button.position((buttonX = buttonX + 25), buttonY);
         buttonHelperFactor *= 10;
       }
-    } 
-    else {
-      fill(shottedCircles[i].circleColor);
-      noStroke();
-      circle(shottedCircles[i].x, shottedCircles[i].y, shottedCircleRadius * 2);
     }
   }
 }
