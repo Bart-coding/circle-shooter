@@ -1,4 +1,9 @@
-let smallCircleHelperX, smallCircleHelperY, smallCircleX, smallCircleY, bigCircleX, bigCircleY;
+let smallCircleHelperX,
+    smallCircleHelperY,
+    smallCircleX,
+    smallCircleY,
+    bigCircleX,
+    bigCircleY;
 let shottedCircleRadius, smallCircleRadius, bigCircleRadius;
 let button, buttonX, buttonY, buttonHelperFactor;
 let shottedCircles = [];
@@ -6,7 +11,12 @@ let hitsCounter;
 let bigCircleColor;
 let cleaningMode;
 let lastShotFrameCount;
-let shotSound, hitSound, currentVolume, mute, muteVarChangedFramesCount, framesToViewMuteInfo;
+let shotSound,
+    hitSound,
+    currentVolume,
+    mute,
+    muteVarChangedFramesCount,
+    framesToViewMuteInfo;
 
 function preload() {
   shotSound = loadSound("assets/blaster-2-81267.mp3");
@@ -20,29 +30,29 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  
-  smallCircleHelperX = random(200,300);
-  smallCircleHelperY = random(200,300);
-  
+
+  smallCircleHelperX = random(200, 300);
+  smallCircleHelperY = random(200, 300);
+
   smallCircleX = 0;
   smallCircleY = 0;
   smallCircleRadius = 50;
-  
+
   moveLength = 50;
-  bigCircleX = width/2;
-  bigCircleY = height/2;
-  bigCircleColor = color(255,255,100);
+  bigCircleX = width / 2;
+  bigCircleY = height / 2;
+  bigCircleColor = color(255, 255, 100);
   bigCircleRadius = 150;
-  
+
   shottedCircleRadius = 15;
   hitsCounter = 0;
   lastShotFrameCount = -15;
-  
-  button = createButton('SWITCH');
+
+  button = createButton("SWITCH");
   buttonX = 580;
   buttonY = 45;
   button.position(buttonX, buttonY);
-  
+
   cleaningMode = false;
   monoSynth = new p5.MonoSynth();
   button.mousePressed(() => {
@@ -52,10 +62,14 @@ function setup() {
 }
 
 function drawHeader() {
-  background(30)
+  background(30);
   fill(255);
   textSize(50);
-  text("Hits: " + hitsCounter + " | clean mode " + (cleaningMode ? "on" : "off"), 50, 70);
+  text(
+    "Hits: " + hitsCounter + " | clean mode " + (cleaningMode ? "on" : "off"),
+    50,
+    70
+  );
 }
 
 function drawShottedCircles() {
@@ -71,7 +85,7 @@ function drawShottedCircles() {
       targetX: mouseX,
       targetY: mouseY,
       circleColor: circle_Color,
-      shotted: Date.now()
+      shotted: Date.now(),
     });
 
     if (!mute) shotSound.play();
@@ -82,24 +96,35 @@ function drawShottedCircles() {
       shottedCircles.splice(i, 1);
       continue;
     }
-    
-    shottedCircles[i].x = lerp(shottedCircles[i].x, shottedCircles[i].targetX, 0.03);
-    shottedCircles[i].y = lerp(shottedCircles[i].y, shottedCircles[i].targetY, 0.03);
-    
+
+    shottedCircles[i].x = lerp(
+      shottedCircles[i].x,
+      shottedCircles[i].targetX,
+      0.03
+    );
+    shottedCircles[i].y = lerp(
+      shottedCircles[i].y,
+      shottedCircles[i].targetY,
+      0.03
+    );
+
     fill(shottedCircles[i].circleColor);
     noStroke();
     circle(shottedCircles[i].x, shottedCircles[i].y, shottedCircleRadius * 2);
-    
-    if (dist(shottedCircles[i].x, shottedCircles[i].y, bigCircleX, bigCircleY) <= bigCircleRadius + shottedCircleRadius) {
+
+    if (
+      dist(shottedCircles[i].x, shottedCircles[i].y, bigCircleX, bigCircleY) <=
+      bigCircleRadius + shottedCircleRadius
+    ) {
       bigCircleColor = shottedCircles[i].circleColor;
       shottedCircles.splice(i, 1);
       hitsCounter++;
-	  if (hitsCounter % buttonHelperFactor === 0) {
+      if (hitsCounter % buttonHelperFactor === 0) {
         button.position((buttonX = buttonX + 25), buttonY);
         buttonHelperFactor *= 10;
       }
 
-	  if (!mute) hitSound.play();
+      if (!mute) hitSound.play();
     }
   }
 }
@@ -107,7 +132,11 @@ function drawShottedCircles() {
 function drawBigCircle() {
   fill(bigCircleColor);
   noStroke();
-  circle(width/2 + sin(radians(frameCount)) * 20, height/2 + cos(radians(frameCount)) * 20, bigCircleRadius * 2);
+  circle(
+    width / 2 + sin(radians(frameCount)) * 20,
+    height / 2 + cos(radians(frameCount)) * 20,
+    bigCircleRadius * 2
+  );
 }
 
 function drawSmallCircle() {
@@ -115,27 +144,41 @@ function drawSmallCircle() {
   let nextMoveVertically = random(-moveLength, moveLength);
   smallCircleHelperX += nextMoveHorizontally;
   smallCircleHelperY += nextMoveVertically;
-  
-  while (dist(smallCircleHelperX, smallCircleHelperY, bigCircleX, bigCircleY) <= smallCircleRadius + bigCircleRadius + 20) {
-    smallCircleHelperX -= nextMoveHorizontally - (nextMoveHorizontally = random(-moveLength, moveLength));
-    smallCircleHelperY -= nextMoveVertically - (nextMoveVertically = random(-moveLength, moveLength));
+
+  while (
+    dist(smallCircleHelperX, smallCircleHelperY, bigCircleX, bigCircleY) <=
+    smallCircleRadius + bigCircleRadius + 20
+  ) {
+    smallCircleHelperX -=
+      nextMoveHorizontally -
+      (nextMoveHorizontally = random(-moveLength, moveLength));
+    smallCircleHelperY -=
+      nextMoveVertically -
+      (nextMoveVertically = random(-moveLength, moveLength));
   }
-  
-  if (smallCircleHelperX <= smallCircleRadius) smallCircleHelperX = smallCircleRadius;
-  if (smallCircleHelperY <= smallCircleRadius) smallCircleHelperY = smallCircleRadius;
-  if (smallCircleHelperX >= width - smallCircleRadius) smallCircleHelperX = width - smallCircleRadius;
-  if (smallCircleHelperY >= height - smallCircleRadius) smallCircleHelperY = height - smallCircleRadius;
-  
+
+  if (smallCircleHelperX <= smallCircleRadius)
+    smallCircleHelperX = smallCircleRadius;
+  if (smallCircleHelperY <= smallCircleRadius)
+    smallCircleHelperY = smallCircleRadius;
+  if (smallCircleHelperX >= width - smallCircleRadius)
+    smallCircleHelperX = width - smallCircleRadius;
+  if (smallCircleHelperY >= height - smallCircleRadius)
+    smallCircleHelperY = height - smallCircleRadius;
+
   let previous_smallCircleX = smallCircleX;
   let previous_smallCircleY = smallCircleY;
-  smallCircleX = lerp(smallCircleX, smallCircleHelperX, 0.03); 
+  smallCircleX = lerp(smallCircleX, smallCircleHelperX, 0.03);
   smallCircleY = lerp(smallCircleY, smallCircleHelperY, 0.03);
-  if (dist(smallCircleX, smallCircleY, bigCircleX, bigCircleY) <= smallCircleRadius + bigCircleRadius + 20) {
+  if (
+    dist(smallCircleX, smallCircleY, bigCircleX, bigCircleY) <=
+    smallCircleRadius + bigCircleRadius + 20
+  ) {
     smallCircleX = previous_smallCircleX;
     smallCircleY = previous_smallCircleY;
   }
-    
-  fill(20,150,100);
+
+  fill(20, 150, 100);
   noStroke();
   circle(smallCircleX, smallCircleY, smallCircleRadius * 2);
 }
@@ -157,9 +200,7 @@ function modifyVolume() {
     shotSound.setVolume(currentVolume);
     hitSound.setVolume(currentVolume);
     drawVolumeInfoText("volume down");
-  }
-
-  else if (keyIsDown(RIGHT_ARROW)) {
+  } else if (keyIsDown(RIGHT_ARROW)) {
     if (mute === true) {
       mute = false;
       muteVarChangedFramesCount = framesToViewMuteInfo;
@@ -194,8 +235,7 @@ function keyPressed() {
       muteVarChangedFramesCount = framesToViewMuteInfo;
       shotSound.stop();
       hitSound.stop();
-    }
-    else {
+    } else {
       mute = false;
       muteVarChangedFramesCount = framesToViewMuteInfo;
     }
