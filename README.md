@@ -7,6 +7,6 @@ You can also:
 * activate the clean mode to clear the board of fired circles
 * change volume of sound effects: left/right arrow key to volume down/up and "M" key to mute/unmute volume.
 
-To play the game, you will probably have to use [a local server](https://github.com/processing/p5.js/wiki/Local-server), but you can also run the game without sound [here](https://editor.p5js.org/Bart-coding/sketches/eFRbKa_5h).
+To play the game, you will probably have to use [a local server](https://github.com/processing/p5.js/wiki/Local-server), but you can also run the game without sound [here](https://editor.p5js.org/Bart-coding/full/eFRbKa_5h).
 
 Kudos are due to the creators of the sound effects who posted them on [Pixabay](https://pixabay.com).
